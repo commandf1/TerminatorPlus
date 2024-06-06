@@ -1,18 +1,21 @@
     @Command(
-            name = "reinforcement",
-            desc = "Begin an AI training session."
+            name = "info",
+            desc = "Display neural network information about a bot.",
+            autofill = "infoAutofill"
     )
-    public void reinforcement(Player sender, @Arg("population-size") int populationSize, @Arg("name") String name, @OptArg("skin") String skin) {
-        //Some initialization and bot spawning code
+    public void info(CommandSender sender, @Arg("name") String name) {
+        //Method to display neural network info
     }
 
-    @override
-    public void saveData() {
-        //Method to save neural network data
+    @Override
+    public void clearSession() {
+        if (agent != null) {
+            agent.stop();
+            agent = null;
+        }
     }
 
-    @override
-    public void loadData() {
-        //Method to load neural network data
+    public boolean hasActiveSession() {
+        return agent != null;
     }
 }
