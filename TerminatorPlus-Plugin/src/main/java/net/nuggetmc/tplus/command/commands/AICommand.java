@@ -1,24 +1,16 @@
-import net.nuggetmc.tplus.utils.AIDataPersistence;
-import java.io.IOException;
-
-
-@Override
-public void saveData() {
-    try {
-        AIDataPersistence.saveData(agent.getNeuralNetwork());
-        plugin.getLogger().info("AI data saved successfully.");
-    } catch (IOException e) {
-        plugin.getLogger().severe("Failed to save AI data: " + e.getMessage());
-    }
+@Command(
+    name = "saveai",
+    desc = "Save the current AI data."
+)
+public void saveAI(CommandSender sender) {
+    saveData();
+    sender.sendMessage(ChatColor.GREEN + "AI data saved successfully.");
 }
 
-  @override
-public void loadData() {
-    try {
-        NeuralNetwork network = AIDataPersistence.loadData();
-        this.agent.setNeuralNetwork(network);
-        plugin.getLogger().info("AI data loaded successfully.");
-    } catch (IOException | ClassNotFoundException e) {
-        plugin.getLogger().severe("Failed to load AI data: " + e.getMessage());
-    }
+@Command(
+    name = "loadai",
+    desc = "Load the AI data."
+public void loadAI(CommandSender sender) {
+    loadData();
+    sender.sendMessage(ChatColor.GREEN + "AI data loaded successfully.");
 }
