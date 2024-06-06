@@ -1,21 +1,24 @@
-    @Command(
-            name = "info",
-            desc = "Display neural network information about a bot.",
-            autofill = "infoAutofill"
-    )
-    public void info(CommandSender sender, @Arg("name") String name) {
-        //Method to display neural network info
-    }
+import net.nuggetmc.tplus.utils.AIDataPersistence;
+import java.io.IOException;
 
-    @Override
-    public void clearSession() {
-        if (agent != null) {
-            agent.stop();
-            agent = null;
-        }
-    }
 
-    public boolean hasActiveSession() {
-        return agent != null;
+@Override
+public void saveData() {
+    try {
+        AIDataPersistence.saveData(agent.getNeuralNetwork());
+        plugin.getLogger().info("AI data saved successfully.");
+    } catch (IOException e) {
+        plugin.getLogger().severe("Failed to save AI data: " + e.getMessage());
+    }
+}
+
+  @override
+public void loadData() {
+    try {
+        NeuralNetwork network = AIDataPersistence.loadData();
+        this.agent.setNeuralNetwork(network);
+        plugin.getLogger().info("AI data loaded successfully.");
+    } catch (IOException | ClassNotFoundException e) {
+        plugin.getLogger().severe("Failed to load AI data: " + e.getMessage());
     }
 }
