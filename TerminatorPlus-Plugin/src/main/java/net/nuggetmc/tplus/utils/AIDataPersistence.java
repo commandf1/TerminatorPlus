@@ -1,20 +1,13 @@
-package net.nuggetmc.tplus.utils;
-import net.nuggetmc.tplus.api.agent.lgagent.ai.neuralNetwork;
-import java.io.*;
+    public static Object loadData() throws IOException, ClassNotFoundException {
+        Path path = Paths.get(FILE_PATH);
 
-public class AIDataPersistence {
+        if (!Files.exists(path)) {
+            return null;
+        }
 
-    private static final String DATA_FILE = "ai_data.dat";
-
-    public static void saveData(NeuralNetwork network) throws IOException {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(DATA_FILE))) {
-            oos.writeObject(network);
+        try (ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(path))) {
+            return ois.readObject();
         }
     }
-
-    public static NeuralNetwork loadData() throws IOException, ClassNotFoundException {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(DATA_FILE)) {
-            return (NeuralNetwork) ois.readObject();
-        }
-    }
+}
 }
