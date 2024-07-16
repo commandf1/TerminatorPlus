@@ -38,11 +38,11 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Waterlogged;
-import org.bukkit.craftbukkit.v1_20_R3.CraftEquipmentSlot;
-import org.bukkit.craftbukkit.v1_20_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.CraftEquipmentSlot;
+import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
@@ -53,6 +53,7 @@ import org.bukkit.util.Vector;
 
 import java.util.*;
 
+@SuppressWarnings("AliControlFlowStatementWithoutBraces")
 public class Bot extends ServerPlayer implements Terminator {
 
     private final TerminatorPlus plugin;
@@ -112,7 +113,10 @@ public class Bot extends ServerPlayer implements Terminator {
 
         Bot bot = new Bot(nmsServer, nmsWorld, profile, addPlayerList);
 
-        bot.connection = new ServerGamePacketListenerImpl(nmsServer, new MockConnection(), bot, CommonListenerCookie.createInitial(bot.getGameProfile()));
+        bot.connection =
+                new ServerGamePacketListenerImpl(
+                        nmsServer, new MockConnection(),
+                        bot, CommonListenerCookie.createInitial(bot.getGameProfile(), true));
 
         bot.setPos(loc.getX(), loc.getY(), loc.getZ());
         bot.setRot(loc.getYaw(), loc.getPitch());

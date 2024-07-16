@@ -6,17 +6,18 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.nuggetmc.tplus.api.InternalBridge;
+import net.nuggetmc.tplus.utils.PlayerUtils;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class InternalBridgeImpl implements InternalBridge {
     @Override
     public void sendBlockDestructionPacket(short entityId, Block block, int progress) {
         ClientboundBlockDestructionPacket crack = new ClientboundBlockDestructionPacket(entityId, new BlockPos(block.getX(), block.getY(), block.getZ()), progress);
-        for (Player all : block.getLocation().getNearbyPlayers(64)) {
+        for (Player all : PlayerUtils.getNearbyPlayers(block.getLocation(), 64)) {
             ((CraftPlayer) all).getHandle().connection.send(crack);
         }
     }

@@ -1,6 +1,6 @@
 plugins {
     `java-library`
-    id("io.papermc.paperweight.userdev") version "1.3.7"
+    id("io.papermc.paperweight.userdev") version "1.7.1"
     id("net.nuggetmc.java-conventions")
 }
 
@@ -12,8 +12,33 @@ java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
+repositories {
+    mavenCentral()
+    maven {
+        url = uri("https://repo.papermc.io/repository/maven-public/")
+    }
+    maven {
+        name = "minecraft-repo"
+        url = uri("https://libraries.minecraft.net/")
+    }
+
+    maven {
+        url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+    }
+
+    maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
+    maven { url = uri("https://oss.sonatype.org/content/repositories/central") }
+}
+
 dependencies {
-    paperDevBundle("1.20.4-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.20.6-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot:1.20.6-R0.1-SNAPSHOT")
+    implementation("net.kyori:adventure-api:4.17.0")
+}
+
+dependencies {
+    paperDevBundle("1.20.6-R0.1-SNAPSHOT")
+    // paperDevBundle("1.20.6-R0.1-SNAPSHOT")
 
     //add the TerminatorPlus-API module
     implementation(project(":TerminatorPlus-API"))
@@ -22,7 +47,7 @@ dependencies {
 
     // You will need to manually specify the full dependency if using the groovy gradle dsl
     // (paperDevBundle and paperweightDevBundle functions do not work in groovy)
-    // paperweightDevelopmentBundle("io.papermc.paper:dev-bundle:1.19-R0.1-SNAPSHOT")
+    // paperweightDevelopmentBundle("io.papermc.paper:dev-bundle:1.20.6-R0.1-SNAPSHOT")
 }
 
 tasks {

@@ -1,6 +1,5 @@
 package net.nuggetmc.tplus.bot;
 
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.nuggetmc.tplus.TerminatorPlus;
 import net.nuggetmc.tplus.api.BotManager;
@@ -12,7 +11,7 @@ import net.nuggetmc.tplus.api.event.BotDeathEvent;
 import net.nuggetmc.tplus.api.utils.MojangAPI;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -52,11 +51,12 @@ public class BotManagerImpl implements BotManager, Listener {
 
     @Override
     public void add(Terminator bot) {
+        /*
         if (joinMessages) {
             // Bukkit.broadcastMessage(ChatColor.YELLOW + (bot.getBotName() + " joined the game"));
             Bukkit.broadcast(MiniMessage.miniMessage().deserialize("<yellow>" + bot.getBotName() + " joined the game"));
         }
-
+*/
         bots.add(bot);
     }
 
@@ -83,10 +83,12 @@ public class BotManagerImpl implements BotManager, Listener {
 
     @Override
     public List<String> fetchNames() {
-        //return bots.stream().map(Bot::getBotName).map(component -> component.getString()).collect(Collectors.toList());
         return bots.stream().map(terminator -> {
-            if (terminator instanceof Bot bot) return bot.getName().getString();
-            else return terminator.getBotName();
+            if (terminator instanceof Bot bot) {
+                return bot.getName().getString();
+            } else {
+                return terminator.getBotName();
+            }
         }).collect(Collectors.toList());
     }
 
@@ -109,14 +111,16 @@ public class BotManagerImpl implements BotManager, Listener {
     public void createBots(CommandSender sender, String name, String skinName, int n, NeuralNetwork network, Location location) {
         long timestamp = System.currentTimeMillis();
 
-        if (n < 1) n = 1;
+        if (n < 1) {
+            n = 1;
+        }
 
         if (sender != null) {
             String message = "Creating " + (n == 1 ? "new bot" : "<red>" + numberFormat.format(n) + "<reset>" + " new bots")
                     + " with name " + "<green>" + name.replace("%", "<light_purple>%" + "<reset>")
                     + (skinName == null ? "" : "<reset>" + " and skin " + "<green>" + skinName)
                     + "<reset>...";
-            sender.sendRichMessage(message);
+            sender.sendMessage(message);
         }
 
         skinName = skinName == null ? name : skinName;
@@ -124,20 +128,24 @@ public class BotManagerImpl implements BotManager, Listener {
         if (location != null) {
             createBots(location, name, MojangAPI.getSkin(skinName), n, network);
         } else {
-            if (sender instanceof Player player)
+            if (sender instanceof Player player) {
                 createBots(player.getLocation(), name, MojangAPI.getSkin(skinName), n, network);
-            else {
+            } else {
                 Location l = new Location(Bukkit.getWorlds().get(0), 0, 0, 0);
                 if (sender != null)
                     // sender.sendMessage(ChatColor.RED + "No location specified, defaulting to " + l + ".");
-                    sender.sendRichMessage("<red>No location specified, defaulting to " + l.getX() + ", " + l.getY() + ", " + l.getZ() + ".");
+                {
+                    sender.sendMessage("<red>No location specified, defaulting to " + l.getX() + ", " + l.getY() + ", " + l.getZ() + ".");
+                }
                 createBots(l, name, MojangAPI.getSkin(skinName), n, network);
             }
         }
 
         if (sender != null)
             // sender.sendMessage("Process completed (" + ChatColor.RED + ((System.currentTimeMillis() - timestamp) / 1000D) + "s" + ChatColor.RESET + ").");
-            sender.sendRichMessage("Process completed (<red>" + ((System.currentTimeMillis() - timestamp) / 1000D) + "s<reset>).");
+        {
+            sender.sendMessage("Process completed (<red>" + ((System.currentTimeMillis() - timestamp) / 1000D) + "s<reset>).");
+        }
     }
 
     @Override
@@ -217,7 +225,9 @@ public class BotManagerImpl implements BotManager, Listener {
     @Override
     public Terminator getBot(UUID uuid) {
         Entity entity = Bukkit.getEntity(uuid);
-        if (entity == null) return null;
+        if (entity == null) {
+            return null;
+        }
         return getBot(entity.getEntityId());
     }
 
@@ -268,8 +278,9 @@ public class BotManagerImpl implements BotManager, Listener {
 
     @EventHandler
     public void onMobTarget(EntityTargetLivingEntityEvent event) {
-        if (mobTarget || event.getTarget() == null)
+        if (mobTarget || event.getTarget() == null) {
             return;
+        }
         Bot bot = (Bot) getBot(event.getTarget().getUniqueId());
         if (bot != null) {
             event.setCancelled(true);
